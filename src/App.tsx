@@ -5,7 +5,9 @@ import { Filters } from './components/Filters';
 import { SearchBar } from './components/SearchBar';
 import { FundTable } from './components/FundTable';
 import { CategoryPills, bucketFor } from './components/CategoryPills';
+import { HoldingsPanel } from './components/HoldingsPanel';
 import { Fund } from './types/fund';
+import { CASData } from './types/holding';
 
 const FundDetailModal = lazy(() =>
   import('./components/FundDetailModal').then(m => ({ default: m.FundDetailModal }))
@@ -31,6 +33,7 @@ export default function App() {
 
   const [activePill, setActivePill] = useState('');
   const [selectedFund, setSelectedFund] = useState<Fund | null>(null);
+  const [casData, setCasData] = useState<CASData | null>(null);
 
   useEffect(() => {
     loadFundList();
@@ -63,7 +66,11 @@ export default function App() {
         totalFunds={funds.length}
         filteredCount={visibleFunds.length}
         onUpdate={updateAll}
+        onCASParsed={setCasData}
+        hasCAS={casData !== null}
+        onClearCAS={() => setCasData(null)}
       />
+      {casData && <HoldingsPanel cas={casData} />}
 
       <Filters
         filters={filters}

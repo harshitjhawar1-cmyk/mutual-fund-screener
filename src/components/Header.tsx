@@ -1,13 +1,18 @@
 import { UpdateProgress } from '../hooks/useFunds';
+import { CASUpload } from './CASUpload';
+import { CASData } from '../types/holding';
 
 interface HeaderProps {
   progress: UpdateProgress;
   totalFunds: number;
   filteredCount: number;
   onUpdate: () => void;
+  onCASParsed: (data: CASData) => void;
+  hasCAS: boolean;
+  onClearCAS: () => void;
 }
 
-export function Header({ progress, totalFunds, filteredCount, onUpdate }: HeaderProps) {
+export function Header({ progress, totalFunds, filteredCount, onUpdate, onCASParsed, hasCAS, onClearCAS }: HeaderProps) {
   const pct = progress.total > 0 ? Math.round((progress.loaded / progress.total) * 100) : 0;
 
   return (
@@ -49,6 +54,9 @@ export function Header({ progress, totalFunds, filteredCount, onUpdate }: Header
             </span>
           </div>
         )}
+
+        {/* CAS Upload */}
+        <CASUpload onParsed={onCASParsed} hasCAS={hasCAS} onClear={onClearCAS} />
 
         {/* Update button */}
         <button
